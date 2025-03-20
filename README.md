@@ -3,7 +3,7 @@ A Python toolbox for Automated Bayesian Inference in Dynamic Causal Models (DCMs
 
 # Description
 
-This repository contains Python routines for Bayesian Inference of DCMs, including code for automated gradient-descent and Markov Chain Monte Carlo techniques
+This repository contains Python code for automated Bayesian Inference of DCMs, including routines for Gradient-Descent and Markov Chain Monte Carlo schemes.
 
 # Dependencies
 
