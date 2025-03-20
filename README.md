@@ -1,9 +1,9 @@
 # abi-DCMs
-A Python toolbox for Automated Bayesian Inference in Dynamic Causal Models (DCMs)
+A Python toolbox for Automated Bayesian Inference in Dynamic Causal Modelling (DCM)
 
 # Description
 
-This repository contains Python code for efficient Bayesian Inference of DCMs, including routines for Gradient-Descent and Markov Chain Monte Carlo schemes.
+This repository contains Python code for efficient Bayesian Inference in DCM, including routines for Gradient-Descent and Markov Chain Monte Carlo schemes.
 
 # Dependencies
 
