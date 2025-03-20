@@ -21,4 +21,4 @@ This repository contains Python code for efficient Bayesian Inference of DCMs, i
 # Acknowledgements
 
 This research has been supported by EU’s Horizon 2020 Framework Programme for Research and Innovation under the Specific Grant Agreements No. 101147319 (EBRAINS 2.0 Project).
-!EU logo(./eu_logo.jpg)
+![EU logo](./eu_logo.jpg)
