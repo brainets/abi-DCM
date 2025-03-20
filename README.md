@@ -1,7 +1,7 @@
 # abi-DCMs
 A Python toolbox for Automated Bayesian Inference in Dynamic Causal Models (DCMs)
 
-<div><img src="https://raw.githubusercontent.com/brainets/abi-DCMs/master/eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
+<div><img src="./eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
 
 # ACKNOWLEDGEMENTS
 
