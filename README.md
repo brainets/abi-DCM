@@ -1,4 +1,4 @@
-# abi-DCMs
+# abi-DCM
 A Python toolbox for Automated Bayesian Inference in Dynamic Causal Modelling (DCM)
 
 # Description
@@ -7,15 +7,15 @@ This repository contains Python code for efficient Bayesian Inference in DCM, in
 
 # Dependencies
 
-- NumPyro
+- [NumPyro](https://num.pyro.ai/)
 
-- JAX
+- [JAX](https://docs.jax.dev/en/latest/)
 
-- JAXopt
+- [JAXopt](https://jaxopt.github.io)
 
-- vbjax
+- [vbjax](https://github.com/ins-amu/vbjax)
 
-- frites
+- [frites](https://brainets.github.io/frites/)
 
 
 # Acknowledgements
