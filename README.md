@@ -24,7 +24,7 @@ git clone https://github.com/brainets/abi-DCM.git $HOME/abi-DCM \
 cd $HOME/abi-DCM/
 
 ### Create a Python environment with Anaconda
-conda env create -f environment.yml \
+conda env create -f environment.yml
 
 ### Run the examples on JupyterLab
 cd examples \
