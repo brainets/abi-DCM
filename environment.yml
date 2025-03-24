@@ -275,4 +275,4 @@ dependencies:
       - vbjax==0.0.13
       - webencodings==0.5.1
       - yarg==0.1.9
-prefix: /home/INT/garcia.p/anaconda3/envs/abi-dcm
+prefix: $HOME/anaconda3/envs/abi-dcm
