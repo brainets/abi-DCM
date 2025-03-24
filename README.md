@@ -19,15 +19,16 @@ This repository contains Python code for efficient Bayesian Inference in DCM, in
 
 # Installation
 
+## Download the code from GitHub
+git clone https://github.com/brainets/abi-DCM.git $HOME/abi-DCM
+cd cd $HOME/abi-dcm/
+
 ## Create a Python environment
 conda env create -f environment.yml
-
-## Download the code from GitHub
-git install git+https://github.com/brainets/abi-DCM.git
+conda activate abi-DCM \
 
 ## Run the code on JupyterLab
-cd ./abi-dcm/examples \
-conda activate abi-DCM \
+cd $HOME/abi-dcm/examples \
 jupyter-lab &
 
 # Acknowledgements
