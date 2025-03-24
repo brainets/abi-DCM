@@ -9,9 +9,9 @@ This repository contains Python code for efficient Bayesian Inference in DCM, in
 
 - [NumPyro](https://num.pyro.ai/)
 
-- [JAX](https://docs.jax.dev/en/latest/)
-
 - [JAXopt](https://jaxopt.github.io)
+
+- [JAX](https://docs.jax.dev/en/latest/)
 
 - [vbjax](https://github.com/ins-amu/vbjax)
 
