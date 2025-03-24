@@ -1,0 +1,16 @@
+Metadata-Version: 2.2
+Name: abi-DCM
+Version: 1.0
+Summary: A Python library for efficient Bayesian Inference in DCM, including routines for Gradient-Descent and Markov Chain Monte Carlo schemes
+Home-page: https://github.com/brainets/abi-DCM
+Author: Pedro Garcia-Rodriguez
+Author-email: pedro.garcia-rodriguez@univ-amu.fr
+License: BSD 3-Clause
+Keywords: Bayesian Inference,DCM,Gradient-Descent,Markov Chain Monte Carlo
+License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: summary
