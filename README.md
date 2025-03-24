@@ -1,5 +1,5 @@
 # abi-DCM
-A Python toolbox for Automated Bayesian Inference in Dynamic Causal Modelling (DCM)
+A Python library for Automated Bayesian Inference in Dynamic Causal Modelling (DCM)
 
 # Description
 
