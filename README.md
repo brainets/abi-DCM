@@ -26,10 +26,9 @@ conda env create -f environment.yml
 git install git+https://github.com/brainets/abi-DCM.git
 
 ## Run the code on JupyterLab
-cd ./abi-dcm/examples
-conda activate abi-DCM
+cd ./abi-dcm/examples \
+conda activate abi-DCM \
 jupyter-lab &
-
 
 # Acknowledgements
 
