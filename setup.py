@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='abi-DCM',
+    name='abi_DCM',
     version='1.0',
     author='Pedro Garcia-Rodriguez',
     author_email='pedro.garcia-rodriguez@univ-amu.fr, andrea.brovelli@univ-amu.fr',
