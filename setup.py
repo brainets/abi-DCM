@@ -4,7 +4,7 @@ setup(
     name='abi-DCM',
     version='1.0',
     author='Pedro Garcia-Rodriguez',
-    author_email='pedro.garcia-rodriguez@univ-amu.fr',
+    author_email='pedro.garcia-rodriguez@univ-amu.fr, andrea.brovelli@univ-amu.fr',
     packages=find_packages(),
     url='https://github.com/brainets/abi-DCM',
     keywords = ['Bayesian Inference', 'DCM', 'Gradient-Descent', 'Markov Chain Monte Carlo'],
