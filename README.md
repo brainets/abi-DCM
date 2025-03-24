@@ -17,7 +17,7 @@ This repository contains Python code for efficient Bayesian Inference in DCM, in
 
 - [frites](https://brainets.github.io/frites/)
 
-# Installation
+# Installation and use
 
 First install ![Anaconda](https://www.anaconda.com/docs/main)
 
