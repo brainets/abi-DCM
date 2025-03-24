@@ -25,8 +25,8 @@ cd $HOME/abi-DCM
 
 ### Install Anaconda and create a Python environment
 
-- Install Anaconda from ![here](https://www.anaconda.com/)
-- conda env create -f environment.yml
+Install Anaconda from ![here](https://www.anaconda.com/):\
+conda env create -f environment.yml
 
 ### Run the examples on JupyterLab
 cd examples \
