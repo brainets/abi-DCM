@@ -27,8 +27,8 @@ cd $HOME/abi-DCM/
 conda env create -f environment.yml \
 conda activate abi-DCM
 
-### Run the examples JupyterLab
-cd $HOME/abi-DCM/examples \
+### Run the examples on JupyterLab
+cd examples \
 jupyter-lab &
 
 # Acknowledgements
