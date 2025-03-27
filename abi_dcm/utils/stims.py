@@ -1,9 +1,7 @@
 import jax, jax.numpy as jnp
 
-def stim_time_shape(shape=None, stim_onset=None, ntime=None, ninputs=1, \
-                    stim_tau=None, alpha=None, beta=None):
+def stim_time_shape(shape=None, ts_stim=None, stim_tau=None, alpha=None, beta=None):
     '''Computes a signal stimulus with a specific shape'''
-    ts_stim = jnp.tile(jnp.r_[:ntime-stim_onset],(ninputs,1))
     match shape:
         case 'Exp':   #Exponential shape        
             stim = jnp.exp(-ts_stim/stim_tau)
@@ -39,7 +37,8 @@ def stim_signal(shape='Alpha', ntrl=1, ninputs=1, stim_onset=None, ntime=None, \
                 stim_tau=None, alpha=None, beta=None):
     '''Constructs a set of different stimulus signals, but identical across trials'''
     INPUTs = jnp.r_[:ninputs]
-    stim_shape = stim_time_shape(shape, stim_onset, ntime, ninputs, stim_tau, alpha, beta)
+    ts_stim = jnp.tile(jnp.r_[:ntime-stim_onset],(ninputs,1))
+    stim_shape = stim_time_shape(shape, ts_stim, stim_tau, alpha, beta)
     
     stim_trl = jax.vmap(lambda input: stim_time_full(stim_shape[input], stim_onset, ntime))(INPUTs)
     stim_trl = jnp.expand_dims(stim_trl,axis=0)
