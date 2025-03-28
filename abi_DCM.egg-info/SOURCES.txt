@@ -1,7 +1,0 @@
-LICENSE
-README.md
-setup.py
-abi_DCM.egg-info/PKG-INFO
-abi_DCM.egg-info/SOURCES.txt
-abi_DCM.egg-info/dependency_links.txt
-abi_DCM.egg-info/top_level.txt
