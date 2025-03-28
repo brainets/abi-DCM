@@ -1,5 +1,4 @@
 import jax, jax.numpy as jnp
-from functools import partial
 
 
 def damped_dynamics(D):
@@ -30,7 +29,7 @@ def nZero_coeff_idx(A):
     
     return A_triu_idx, A_tril_idx
 
-@partial(jax.jit, static_argnames=['n_cols'])
+
 def reconst_A(n_cols, A_triu_idx, A_tril_idx, A_vec):
     '''Reconstructs a squared matrix A from the upper and 
     lower triangles extracted from a flat array'''

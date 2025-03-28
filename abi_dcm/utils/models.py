@@ -1,6 +1,7 @@
 import jax, jax.numpy as jnp
 import vbjax as vb
 
+
 def dcm(x, up):
     '''Extension of function vbjax.dcm_dfun to unpack 
     input & parameters from a joint tuple (u,p)'''

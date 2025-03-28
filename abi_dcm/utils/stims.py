@@ -1,7 +1,9 @@
 import jax, jax.numpy as jnp
 
+
 def stim_time_shape(shape=None, ts_stim=None, stim_tau=None, alpha=None, beta=None):
     '''Computes a signal stimulus with a specific shape'''
+    
     match shape:
         case 'Exp':   #Exponential shape        
             stim = jnp.exp(-ts_stim/stim_tau)
@@ -29,6 +31,7 @@ def stim_time_shape(shape=None, ts_stim=None, stim_tau=None, alpha=None, beta=No
 
 def stim_time_full(stim_shape, stim_onset=None, ntime=None, ninputs=1):
     '''Computes a signal stimulus in the full time domain'''
+    
     stim_time = jnp.zeros((ntime,))    
     return jax.lax.dynamic_update_slice(stim_time, stim_shape, (stim_onset,))
 
@@ -36,6 +39,7 @@ def stim_time_full(stim_shape, stim_onset=None, ntime=None, ninputs=1):
 def stim_signal(shape='Alpha', ntrl=1, ninputs=1, stim_onset=None, ntime=None, \
                 stim_tau=None, alpha=None, beta=None):
     '''Constructs a set of different stimulus signals, but identical across trials'''
+    
     INPUTs = jnp.r_[:ninputs]
     ts_stim = jnp.tile(jnp.r_[:ntime-stim_onset],(ninputs,1))
     stim_shape = stim_time_shape(shape, ts_stim, stim_tau, alpha, beta)

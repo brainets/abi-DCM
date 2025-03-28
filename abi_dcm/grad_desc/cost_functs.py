@@ -3,12 +3,11 @@ import vbjax as vb
 from ..utils.matrices import reconst_A
 from ..utils.stims import stim_signal
 from ..utils.models import dcm_bilinear_predict
-from functools import partial
 
 
-@partial(jax.jit, static_argnames = ['ntime', 'onset_ind', 'stim_sh', 'C_shape'])
-def loss_fun_all(p_hat_vec, A_triu_idx, A_tril_idx, B, C_shape, C_cond_nZero_idx, stim_sh, pos_max, \
-                 tau, TRLs, dt, x0, ntime, onset_ind, eps, xs_exp):
+def loss_fun_all(p_hat_vec, A_triu_idx, A_tril_idx, B, C_cond_nZero_idx, tau, \
+                 pos_max, TRLs, dt, x0, eps, xs_exp, \
+                 C_shape=None, stim_sh=0, ntime=None, onset_ind=0):
     '''A cost function to optimize a DCM by adjusting 
     matrices A and C, along with inputs parameters'''
     
@@ -29,6 +28,7 @@ def loss_fun_all(p_hat_vec, A_triu_idx, A_tril_idx, B, C_shape, C_cond_nZero_idx
     par_shape = (ninputs,1)
     match stim_sh:
         case 1:  # Gamma input
+            
             stim_pars_hat_vec = jax.lax.dynamic_slice(p_hat_vec, (size_triu+size_tril+1+size_C_stim,),(2*ninputs,))
             alpha_hat = jnp.reshape(stim_pars_hat_vec[:ninputs], par_shape)
             beta_hat = (alpha_hat - 1)/pos_max
@@ -46,10 +46,10 @@ def loss_fun_all(p_hat_vec, A_triu_idx, A_tril_idx, B, C_shape, C_cond_nZero_idx
     sse = lambda x,y: jnp.sum(jnp.square(x-y))
     return sse(xs_hat_c, xs_exp)
 
-
-@partial(jax.jit, static_argnames = ['ntime', 'onset_ind', 'stim_sh', 'C_shape'])
-def loss_fun_A_C(p_hat_vec, A_triu_idx, A_tril_idx, B, C_shape, C_cond_nZero_idx,stim_pars_cond, \
-                 stim_sh, tau, TRLs, dt, x0, ntime, onset_ind, eps, xs_exp):
+    
+def loss_fun_A_C(p_hat_vec, A_triu_idx, A_tril_idx, B, C_cond_nZero_idx, tau, \
+                 stim_pars_cond, TRLs, dt, x0, eps, xs_exp, \
+                 C_shape=None, stim_sh=0, ntime=None, onset_ind=0):
     '''A cost function to optimize a DCM by adjusting 
     matrices A and C. Input parameters are excluded'''
     
