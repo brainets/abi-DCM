@@ -4,10 +4,10 @@ from ..utils.matrices import reconst_A
 from ..utils.stims import stim_signal
 from ..utils.models import dcm_bilinear_predict
 
-
-def loss_fun_all(p_hat_vec, A_triu_idx, A_tril_idx, B, C_cond_nZero_idx, tau, \
-                 pos_max, TRLs, dt, x0, eps, xs_exp, \
-                 C_shape=None, stim_sh=0, ntime=None, onset_ind=0):
+    
+def loss_fun_all(p_hat_vec, C_cond_nZero_idx,  A_triu_idx=None, A_tril_idx=None, eps=None, xs_exp=None, \
+                 B=None, C_shape=None, tau=None, ntrl=None, ntime=None, \
+                 stim_sh=0, onset_ind=None, pos_max=None, dt=None, x0=None):
     '''A cost function to optimize a DCM by adjusting 
     matrices A and C, along with inputs parameters'''
     
@@ -22,13 +22,12 @@ def loss_fun_all(p_hat_vec, A_triu_idx, A_tril_idx, B, C_cond_nZero_idx, tau, \
     size_C_stim = C_cond_nZero_idx[0].size
     C_hat_vec = jax.lax.dynamic_slice(p_hat_vec, (size_triu+size_tril+1,),(size_C_stim,))
     C_hat = C_hat.at[C_cond_nZero_idx].set(C_hat_vec)
-
-    # Reconstruct input's parameters from a flat vector of estimated values
+    
+   # Reconstruct input's parameters from a flat vector of estimated values
     ninputs = C_shape[1]
     par_shape = (ninputs,1)
     match stim_sh:
         case 1:  # Gamma input
-            
             stim_pars_hat_vec = jax.lax.dynamic_slice(p_hat_vec, (size_triu+size_tril+1+size_C_stim,),(2*ninputs,))
             alpha_hat = jnp.reshape(stim_pars_hat_vec[:ninputs], par_shape)
             beta_hat = (alpha_hat - 1)/pos_max
@@ -37,7 +36,8 @@ def loss_fun_all(p_hat_vec, A_triu_idx, A_tril_idx, B, C_cond_nZero_idx, tau, \
             stim_pars_hat_vec = jax.lax.dynamic_slice(p_hat_vec, (size_triu+size_tril+1+size_C_stim,),(ninputs,))
             tau_hat = jnp.reshape(stim_pars_hat_vec, par_shape)
             stim = stim_signal(shape='Alpha', ninputs=ninputs, ntime=ntime, stim_onset=onset_ind, stim_tau=tau_hat)
-        
+    
+    TRLs = jnp.r_[:ntrl]
     ts = jnp.r_[onset_ind:ntime]
     us_hat = jnp.matrix_transpose(stim[...,ts])
     p_hat = vb.DCMTheta(A=A_hat/tau, B=B/tau, C=C_hat/tau)

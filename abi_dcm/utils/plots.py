@@ -1,9 +1,13 @@
 import matplotlib.pyplot as plt
+import vbjax as vb
+import jax.numpy as jnp
+from numpy import NaN
+import seaborn as sns
+from ..utils.models import dcm_bilinear_predict
+
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.graphics.tsaplots import plot_pacf, plot_acf
-import seaborn as sns
-from numpy import NaN
-import jax.numpy as jnp
+
 
 def plot_signals(time_pts=None, data_plot=None, num_plots=5, label_= 'Signal'):
 
@@ -27,7 +31,7 @@ def plot_signals(time_pts=None, data_plot=None, num_plots=5, label_= 'Signal'):
 
 
 def plot_trials(time_pts=None, data=None, ROI=0, num_trials=5):
-    '''Plots some trials for one ROI'''
+    '''Plots some trial signals for one ROI'''
 
     num_plots=num_trials
     data_plot = data[:,ROI]
@@ -98,4 +102,25 @@ def plot_matrix(A=None, title_str='A', title_size=20, cmap='viridis', no_diag=Tr
         spine.set_linewidth(1) 
     
     plt.title(title_str, fontsize=title_size)
+    
+    
+def plot_ROIs_model(i=0, axes=None, titles=None, num_ROIs=5, name_ROIs_set=None, colors=None, \
+                    data=None, xs_model=None, time_pts=None, onset_ind=0):
+    '''Plots the trial-average for some ROIs, together with model predictions'''
+    
+    sse = lambda x,y: jnp.sum(jnp.square(x-y))
+    # Exclude baseline activity
+    xs_data = jnp.expand_dims(data[onset_ind:], axis=0)
+    ROIs = range(num_ROIs)
+    for roi in ROIs:
+        ax = axes[roi, i]   
+        ax.plot(time_pts[onset_ind:], xs_model[:,roi], linestyle='-.', color=colors[roi])
+        ax.plot(time_pts, data[:,roi], color=colors[roi])
+        if roi==0:
+            ax.set_title(f'{titles[i]}: sse = {sse(xs_model, xs_data):0.2e}', fontsize=18)
+        if roi==num_ROIs-1:
+            ax.set_xlabel('time (dt)')
+        if i==0:
+            ax.text(.1,.5, name_ROIs_set.iat[roi], fontsize=15)
+                
     

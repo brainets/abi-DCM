@@ -30,6 +30,7 @@ def make_ode(dt, dfun, adhoc=None):
 @jax.jit
 def dcm_bilinear_predict(TRLs, dt, x0, ts, us, p, eps):
     '''Compute predictions for all time steps in the DCM process'''
+    
     _, loop = make_ode(dt, dcm)
     xs = jax.vmap(lambda trl: loop(x0, (ts,us[trl]), p))(TRLs)
     return jnp.add(xs,eps)
