@@ -49,32 +49,26 @@ def plot_ROIs(time_pts=None, data=None, num_ROIs=5, name_ROIs=None):
         plot_signals(time_pts, data_plot, num_plots, label_ = 'ROI')
 
 
-def plot_correlations(trial=0, ROI=0, data=None):
-    '''Plots autocorrelation and partial-autocorrelations for one trial of a ROI'''
-
-    # Augmented Dickey Fuller test
-    df_stationarityTest = adfuller(data[trial,ROI], autolag='AIC')
-    # Check the p-value
-    pval = df_stationarityTest[1]
-
-    fig, axes = plt.subplots(1, 2, sharey=False)
-
-    lag_max=15
-    plot_pacf(data[trial,ROI], lags=lag_max, auto_ylims=True, ax=axes[0], \
-             method='ywm')
-    # plt.gca().set_box_aspect(0.9)
-    # plt.legend(fontsize=7, loc='upper right')
-    axes[0].set_xlabel('lag')
-    axes[0].set_xlim(-0.5, lag_max)
-
-    lag_max=30
-    plt.suptitle(f'Trial {trial}-th, adf_pval: {pval:0.4f}')
-    plot_acf(data[trial,ROI], lags=lag_max, auto_ylims=True, ax=axes[1])
-    # plt.gca().set_box_aspect(0.7)
-    axes[1].set_xlabel('lag')
-    axes[1].set_xlim(-0.5, lag_max)
+def plot_ROIs_model(i=0, axes=None, titles=None, num_ROIs=5, name_ROIs_set=None, colors=None, \
+                    data=None, xs_model=None, time_pts=None, onset_ind=0):
+    '''Plots the trial-average for some ROIs, together with model predictions'''
     
+    sse = lambda x,y: jnp.sum(jnp.square(x-y))
+    # Exclude baseline activity
+    xs_data = jnp.expand_dims(data[onset_ind:], axis=0)
+    ROIs = range(num_ROIs)
+    for roi in ROIs:
+        ax = axes[roi, i]   
+        ax.plot(time_pts[onset_ind:], xs_model[:,roi], linestyle='-.', color=colors[roi])
+        ax.plot(time_pts, data[:,roi], color=colors[roi])
+        if roi==0:
+            ax.set_title(f'{titles[i]}: sse = {sse(xs_model, xs_data):0.2e}', fontsize=18)
+        if roi==num_ROIs-1:
+            ax.set_xlabel('time (dt)')
+        if i==0:
+            ax.text(.1,.5, name_ROIs_set.iat[roi], fontsize=15)
 
+    
 def plot_matrix(A=None, title_str='A', title_size=20, cmap='viridis', no_diag=True, no_zeros= True, \
                 annot=True, annot_fs=8, annot_fmt=".3f", \
                 shrink=1.0, vmin=None, vmax=None, cbar=False, ytickls=False, xtickls=False):
@@ -104,23 +98,28 @@ def plot_matrix(A=None, title_str='A', title_size=20, cmap='viridis', no_diag=Tr
     plt.title(title_str, fontsize=title_size)
     
     
-def plot_ROIs_model(i=0, axes=None, titles=None, num_ROIs=5, name_ROIs_set=None, colors=None, \
-                    data=None, xs_model=None, time_pts=None, onset_ind=0):
-    '''Plots the trial-average for some ROIs, together with model predictions'''
-    
-    sse = lambda x,y: jnp.sum(jnp.square(x-y))
-    # Exclude baseline activity
-    xs_data = jnp.expand_dims(data[onset_ind:], axis=0)
-    ROIs = range(num_ROIs)
-    for roi in ROIs:
-        ax = axes[roi, i]   
-        ax.plot(time_pts[onset_ind:], xs_model[:,roi], linestyle='-.', color=colors[roi])
-        ax.plot(time_pts, data[:,roi], color=colors[roi])
-        if roi==0:
-            ax.set_title(f'{titles[i]}: sse = {sse(xs_model, xs_data):0.2e}', fontsize=18)
-        if roi==num_ROIs-1:
-            ax.set_xlabel('time (dt)')
-        if i==0:
-            ax.text(.1,.5, name_ROIs_set.iat[roi], fontsize=15)
-                
+def plot_correlations(trial=0, ROI=0, data=None):
+    '''Plots autocorrelation and partial-autocorrelations for one trial of a ROI'''
+
+    # Augmented Dickey Fuller test
+    df_stationarityTest = adfuller(data[trial,ROI], autolag='AIC')
+    # Check the p-value
+    pval = df_stationarityTest[1]
+
+    fig, axes = plt.subplots(1, 2, sharey=False)
+
+    lag_max=15
+    plot_pacf(data[trial,ROI], lags=lag_max, auto_ylims=True, ax=axes[0], \
+             method='ywm')
+    # plt.gca().set_box_aspect(0.9)
+    # plt.legend(fontsize=7, loc='upper right')
+    axes[0].set_xlabel('lag')
+    axes[0].set_xlim(-0.5, lag_max)
+
+    lag_max=30
+    plt.suptitle(f'Trial {trial}-th, adf_pval: {pval:0.4f}')
+    plot_acf(data[trial,ROI], lags=lag_max, auto_ylims=True, ax=axes[1])
+    # plt.gca().set_box_aspect(0.7)
+    axes[1].set_xlabel('lag')
+    axes[1].set_xlim(-0.5, lag_max)
     
