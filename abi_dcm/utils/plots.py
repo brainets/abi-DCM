@@ -3,7 +3,9 @@ import vbjax as vb
 import jax.numpy as jnp
 from numpy import NaN
 import seaborn as sns
+
 from ..utils.models import dcm_bilinear_predict
+from ..utils.stims import stim_signal
 
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.graphics.tsaplots import plot_pacf, plot_acf
@@ -49,24 +51,44 @@ def plot_ROIs(time_pts=None, data=None, num_ROIs=5, name_ROIs=None):
         plot_signals(time_pts, data_plot, num_plots, label_ = 'ROI')
 
 
-def plot_ROIs_model(i=0, axes=None, titles=None, num_ROIs=5, name_ROIs_set=None, colors=None, \
-                    data=None, xs_model=None, time_pts=None, onset_ind=0):
-    '''Plots the trial-average for some ROIs, together with model predictions'''
+def plot_ROIs_DCM(i_cond=0, axes=None, titles=None, num_ROIs=5, name_ROIs_set=None, colors=None, \
+                  data=None, stim_sh=0, stim=None, stim_pars=None, p=None, time_pts=None, onset_ind=0, \
+                  ninputs=None, ntime=None, TRLs=None, dt=None, x0=None, eps=None):
+    '''Plots the trial-average for some ROIs, together with DCM model predictions.
+       Returns model predictions and the Sum of Squared Errors (SSE) respect to exp. data'''
     
+    # SSE to compare model predictions with exp. data
     sse = lambda x,y: jnp.sum(jnp.square(x-y))
-    # Exclude baseline activity
+    
+    # Exprimental data: exclude baseline activity
     xs_data = jnp.expand_dims(data[onset_ind:], axis=0)
+    # Model prediction
+    
+    if stim is None:
+        # Create the stimulus input from a vector of given parameter values
+        if stim_sh: # Gamma input
+            alpha, beta = stim_pars[:ninputs], stim_pars[ninputs:]
+            stim = stim_signal(shape='Gamma', ninputs=ninputs, ntime=ntime, stim_onset=onset_ind, alpha=alpha, beta=beta)
+        else: # Alpha input
+            stim_tau = stim_pars
+            stim = stim_signal(shape='Alpha', ninputs=ninputs, ntime=ntime, stim_onset=onset_ind, stim_tau=stim_tau)
+    ts = time_pts[onset_ind:]        
+    us = jnp.matrix_transpose(stim[...,ts])
+    xs_model = dcm_bilinear_predict(TRLs, dt, x0, ts, us, p, eps).squeeze()
+    
     ROIs = range(num_ROIs)
     for roi in ROIs:
-        ax = axes[roi, i]   
+        ax = axes[roi, i_cond]   
         ax.plot(time_pts[onset_ind:], xs_model[:,roi], linestyle='-.', color=colors[roi])
         ax.plot(time_pts, data[:,roi], color=colors[roi])
         if roi==0:
-            ax.set_title(f'{titles[i]}: sse = {sse(xs_model, xs_data):0.2e}', fontsize=18)
+            ax.set_title(f'{titles[i_cond]}: sse = {sse(xs_model, xs_data):0.2e}', fontsize=18)
         if roi==num_ROIs-1:
             ax.set_xlabel('time (dt)')
-        if i==0:
+        if i_cond==0:
             ax.text(.1,.5, name_ROIs_set.iat[roi], fontsize=15)
+            
+    return sse(xs_model, xs_data), xs_model
 
     
 def plot_matrix(A=None, title_str='A', title_size=20, cmap='viridis', no_diag=True, no_zeros= True, \
@@ -122,4 +144,5 @@ def plot_correlations(trial=0, ROI=0, data=None):
     # plt.gca().set_box_aspect(0.7)
     axes[1].set_xlabel('lag')
     axes[1].set_xlim(-0.5, lag_max)
+    
     
