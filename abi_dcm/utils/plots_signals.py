@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import vbjax as vb
 import jax.numpy as jnp
 from numpy import NaN
-import seaborn as sns
 
 from ..utils.models import dcm_bilinear_predict
 from ..utils.stims import stim_signal
@@ -91,35 +90,6 @@ def plot_ROIs_DCM(i_cond=0, axes=None, titles=None, num_ROIs=5, name_ROIs_set=No
     return sse(xs_model, xs_data), xs_model
 
     
-def plot_matrix(A=None, title_str='A', title_size=20, cmap='viridis', no_diag=True, no_zeros= True, \
-                annot=True, annot_fs=8, annot_fmt=".3f", \
-                shrink=1.0, vmin=None, vmax=None, cbar=False, ytickls=False, xtickls=False):
-    '''Plots matrix A as a seaborn heatmap'''
-    
-    if no_diag:
-        diag_idx = jnp.diag_indices_from(A)
-        diag_A = A[0,0]
-        A = A.at[diag_idx].set(NaN)
-    if no_zeros:
-        A = A.at[jnp.where(A==0.00)].set(NaN)
-    
-    kw = dict(cmap=cmap, vmin=vmin, vmax=vmax, square=True, cbar_kws={"shrink": shrink}, annot_kws={"fontsize":annot_fs})
-    ax = sns.heatmap(A, **kw, cbar=cbar, yticklabels=ytickls, xticklabels=xtickls, annot=annot, fmt=annot_fmt)
-    if no_diag and ~jnp.isnan(diag_A): 
-        for i in range(len(A)):
-            ax.text(diag_idx[0][i]+.5, diag_idx[1][i]+.5, f'{diag_A: .3f}', fontsize=annot_fs, \
-                    horizontalalignment='center', verticalalignment='center', )
-    ax.set_yticklabels(ax.get_yticklabels(),rotation=30)
-    ax.set_xticklabels(ax.get_xticklabels(),rotation=70)
-
-    # Drawing the frame 
-    for _, spine in ax.spines.items():
-        spine.set_visible(True)
-        spine.set_linewidth(1) 
-    
-    plt.title(title_str, fontsize=title_size)
-    
-    
 def plot_correlations(trial=0, ROI=0, data=None):
     '''Plots autocorrelation and partial-autocorrelations for one trial of a ROI'''
 
@@ -144,5 +114,4 @@ def plot_correlations(trial=0, ROI=0, data=None):
     # plt.gca().set_box_aspect(0.7)
     axes[1].set_xlabel('lag')
     axes[1].set_xlim(-0.5, lag_max)
-    
     
