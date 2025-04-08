@@ -6,9 +6,6 @@ from numpy import NaN
 from ..utils.models import dcm_bilinear_predict
 from ..utils.stims import stim_signal
 
-from statsmodels.tsa.stattools import adfuller
-from statsmodels.graphics.tsaplots import plot_pacf, plot_acf
-
 
 def plot_signals(time_pts=None, data_plot=None, num_plots=5, label_= 'Signal'):
 
@@ -88,30 +85,4 @@ def plot_ROIs_DCM(i_cond=0, axes=None, titles=None, num_ROIs=5, name_ROIs_set=No
             ax.text(.1,.5, name_ROIs_set.iat[roi], fontsize=15)
             
     return sse(xs_model, xs_data), xs_model
-
-    
-def plot_correlations(trial=0, ROI=0, data=None):
-    '''Plots autocorrelation and partial-autocorrelations for one trial of a ROI'''
-
-    # Augmented Dickey Fuller test
-    df_stationarityTest = adfuller(data[trial,ROI], autolag='AIC')
-    # Check the p-value
-    pval = df_stationarityTest[1]
-
-    fig, axes = plt.subplots(1, 2, sharey=False)
-
-    lag_max=15
-    plot_pacf(data[trial,ROI], lags=lag_max, auto_ylims=True, ax=axes[0], \
-             method='ywm')
-    # plt.gca().set_box_aspect(0.9)
-    # plt.legend(fontsize=7, loc='upper right')
-    axes[0].set_xlabel('lag')
-    axes[0].set_xlim(-0.5, lag_max)
-
-    lag_max=30
-    plt.suptitle(f'Trial {trial}-th, adf_pval: {pval:0.4f}')
-    plot_acf(data[trial,ROI], lags=lag_max, auto_ylims=True, ax=axes[1])
-    # plt.gca().set_box_aspect(0.7)
-    axes[1].set_xlabel('lag')
-    axes[1].set_xlim(-0.5, lag_max)
     

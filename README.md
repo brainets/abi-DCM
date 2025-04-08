@@ -35,7 +35,7 @@ conda install conda-forge::jupyterlab \
 cd $HOME/abi-DCM/examples \
 jupyter-lab & \
 
-(once JupyterLab opens up, choose *abi-dcm* as IPython Kernel)
+(once JupyterLab opens up, choose *abi-dcm* as IPython kernel)
 
 # Acknowledgements
 
