@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import jax.numpy as jnp
 from numpy import NaN
 import seaborn as sns
+from scipy.stats import pearsonr
 
 
 def plot_matrix(A=None, title_str='A', title_size=20, cmap='viridis', no_diag=True, no_zeros= True, \
@@ -80,9 +81,12 @@ def plot_matrices_coeff_grid(A_ref=None, A_ref_label='A_ref', A_conds=None, A_la
         y = jnp.concatenate([jnp.abs( A_ref[A_triu_idx]),  jnp.abs( A_ref[A_tril_idx])])
         x = jnp.concatenate([jnp.abs(A_cond[A_triu_idx]), jnp.abs(A_cond[A_tril_idx])])/A_conds_max[i_cond]
         plt.plot(x,y,'o')
+        corr, p = pearsonr(x,y)
+        plt.text(f'r = {corr: .3f}, p = {p: .3f}')
         plt.xlabel(f'|{A_label}|/|max|', fontsize=10)
         if i_cond==0:
             plt.ylabel(f'|{A_ref_label}|')
+ 
 
     plt.tight_layout()
     

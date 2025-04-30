@@ -53,13 +53,10 @@ def plot_ROIs_DCM(i_cond=0, axes=None, titles=None, num_ROIs=5, name_ROIs_set=No
     '''Plots the trial-average for some ROIs, together with DCM model predictions.
        Returns model predictions and the Sum of Squared Errors (SSE) respect to exp. data'''
     
-    # SSE to compare model predictions with exp. data
-    sse = lambda x,y: jnp.sum(jnp.square(x-y))
+    # Exprimental data, excluding baseline activity
+    xs_data = data[:,onset_ind:]
     
-    # Exprimental data: exclude baseline activity
-    xs_data = jnp.expand_dims(data[onset_ind:], axis=0)
     # Model prediction
-    
     if stim is None:
         # Create the stimulus input from a vector of given parameter values
         if stim_sh: # Gamma input
@@ -72,17 +69,20 @@ def plot_ROIs_DCM(i_cond=0, axes=None, titles=None, num_ROIs=5, name_ROIs_set=No
     us = jnp.matrix_transpose(stim[...,ts])
     xs_model = dcm_bilinear_predict(TRLs, dt, x0, ts, us, p, eps).squeeze()
     
+    # SSE to compare model predictions with exp. data
+    sse = lambda x,y: jnp.sum(jnp.square(x-y))
+    
     ROIs = range(num_ROIs)
     for roi in ROIs:
-        ax = axes[roi, i_cond]   
-        ax.plot(time_pts[onset_ind:], xs_model[:,roi], linestyle='-.', color=colors[roi])
-        ax.plot(time_pts, data[:,roi], color=colors[roi])
+        ax = axes[roi, i_cond]
+        ax.plot(ts,   xs_model[...,roi].T, color=colors[roi], linestyle='-.')
+        ax.plot(time_pts, data[...,roi].T, color=colors[roi])
         if roi==0:
             ax.set_title(f'{titles[i_cond]}: sse = {sse(xs_model, xs_data):0.2e}', fontsize=18)
         if roi==num_ROIs-1:
             ax.set_xlabel('time (dt)')
         if i_cond==0:
             ax.text(.1,.5, name_ROIs_set.iat[roi], fontsize=15)
-            
+    
     return sse(xs_model, xs_data), xs_model
     

@@ -10,17 +10,15 @@ def plot_ROIs_probDCM(i_cond=0, axes=None, titles=None, num_ROIs=5, name_ROIs_se
     sse = lambda x,y: jnp.sum(jnp.square(x-y))
     
     # Exprimental data: exclude baseline activity
-    xs_data = jnp.expand_dims(data[onset_ind:], axis=0)
-    
-    print(i_cond)
+    xs_data = data[:,onset_ind:]
     
     ROIs = range(num_ROIs)
     for roi in ROIs:
         ax = axes[roi,i_cond]
-        ax.plot(time_pts, data[:,roi], color=colors[roi])
-        ax.plot(time_pts[onset_ind:], xs_model[:,roi], linestyle='-.', color=colors[roi])
+        ax.plot(time_pts, data[...,roi].T, color=colors[roi])
+        ax.plot(time_pts[onset_ind:], xs_model[...,roi].T, linestyle='-.', color=colors[roi])
         # plot 90% confidence level of predictions
-        ax.fill_between(time_pts[onset_ind:], percentiles_mod[0,...,roi], percentiles_mod[1,...,roi], color="lightblue")
+        # ax.fill_between(time_pts[onset_ind:], percentiles_mod[0,...,roi], percentiles_mod[1,...,roi], color="lightblue")
         
         if roi==0:
             ax.set_title(f'{titles[i_cond]}: sse = {sse(xs_model, xs_data):0.2e}', fontsize=18)

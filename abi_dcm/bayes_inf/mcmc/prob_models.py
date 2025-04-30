@@ -87,5 +87,10 @@ def DCM_bilinear(A, Ahat0, Ahat0_triu_idx, Ahat0_tril_idx, A_fract, B, Chat0, Ch
 
     #### Likelihood model ####
     Lambda = numpyro.sample(f'Lambda{s_label}', dist.LogNormal(jnp.log(Lambda_max),1))
-    numpyro.sample(f'xs_hat_c{s_label}', dist.MultivariateNormal(loc=xs_hat_c, covariance_matrix=1/Lambda*cov_matrix), obs=xs_exp)
+    
+    try:
+        obs=xs_exp[:,onset_ind:]
+    except:
+        obs=None
+    numpyro.sample(f'xs_hat_c{s_label}', dist.MultivariateNormal(loc=xs_hat_c, covariance_matrix=1/Lambda*cov_matrix), obs=obs)
     
