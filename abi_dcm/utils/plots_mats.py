@@ -59,7 +59,7 @@ def plot_matrices_coeff_grid(A_ref=None, A_ref_label='A_ref', A_conds=None, A_la
     ''' Plots Matrix A_ref coefficients, versus matrices A_conds coefficients estimated from different model configurations''' 
     
     plt.figure(figsize=(17,8))
-    
+
     A_conds_max = [ jnp.abs(A_conds[i_cond]).max() for i_cond in cond_idx ]
     for i_cond in cond_idx: # range(nconds):
         # Extracting Matrices's coefficients from tensor of A_conds values
@@ -82,7 +82,7 @@ def plot_matrices_coeff_grid(A_ref=None, A_ref_label='A_ref', A_conds=None, A_la
         x = jnp.concatenate([jnp.abs(A_cond[A_triu_idx]), jnp.abs(A_cond[A_tril_idx])])/A_conds_max[i_cond]
         plt.plot(x,y,'o')
         corr, p = pearsonr(x,y)
-        plt.text(f'r = {corr: .3f}, p = {p: .3f}')
+        # plt.text(right, top, f'r = {corr: .3f}, p = {p: .3f}')
         plt.xlabel(f'|{A_label}|/|max|', fontsize=10)
         if i_cond==0:
             plt.ylabel(f'|{A_ref_label}|')
